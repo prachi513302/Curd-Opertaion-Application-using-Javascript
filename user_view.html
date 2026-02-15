@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Details</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            background: #fff;
+            padding: 25px;
+            width: 350px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 6px;
+        }
+
+        button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: #ff5252;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Student Details</h2>
+    <table>
+        <tr><td><b>ID</b></td><td id="sid"></td></tr>
+        <tr><td><b>City</b></td><td id="city"></td></tr>
+        <tr><td><b>Age</b></td><td id="age"></td></tr>
+        <tr><td><b>Semester</b></td><td id="sem"></td></tr>
+        <tr><td><b>Role</b></td><td id="role"></td></tr>
+    </table>
+
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+    let student = localStorage.getItem("loggedstudent");
+
+    if (!student) {
+        // If user directly opens this page
+        window.location.href = "login.html";
+    } else {
+        student = JSON.parse(student);
+
+        document.getElementById("sid").innerHTML = student.sId;
+        document.getElementById("city").innerHTML = student.City;
+        document.getElementById("age").innerHTML = student.Age;
+        document.getElementById("sem").innerHTML = student.Sem;
+        document.getElementById("role").innerHTML = student.role;
+    }
+
+    function logout() {
+        localStorage.removeItem("loggedstudent");
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin View – Student Management</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+    padding:20px;
+}
+h2{
+    text-align:center;
+}
+.container{
+    max-width:1000px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+}
+input{
+    padding:6px;
+    margin:5px;
+}
+button{
+    padding:6px 12px;
+    margin:5px;
+    cursor:pointer;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+th,td{
+    border:1px solid #ccc;
+    padding:8px;
+    text-align:center;
+}
+th{
+    background:#4facfe;
+    color:#fff;
+}
+.delete{
+    background:red;
+    color:white;
+    border:none;
+}
+.edit{
+    background:orange;
+    color:white;
+    border:none;
+}
+.save{
+    background:green;
+    color:white;
+    border:none;
+}
+.logout{
+    background:#333;
+    color:#fff;
+    float:right;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<button class="logout" onclick="logout()">Logout</button>
+<h2>Admin Panel – Student Management</h2>
+
+<!-- INSERT / UPDATE FORM -->
+<h3>Add / Update Student</h3>
+<input type="text" id="sId" placeholder="Student ID">
+<input type="text" id="pass" placeholder="Password">
+<input type="text" id="city" placeholder="City">
+<input type="number" id="age" placeholder="Age">
+<input type="text" id="sem" placeholder="Semester">
+<button class="save" onclick="saveStudent()">Save</button>
+
+<!-- STUDENT TABLE -->
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Password</th>
+<th>City</th>
+<th>Age</th>
+<th>Semester</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="tableData"></tbody>
+</table>
+</div>
+
+<script>
+// 🔐 ADMIN PROTECTION
+let loggedUser = JSON.parse(localStorage.getItem("loggedstudent"));
+if(!loggedUser || loggedUser.role !== "admin"){
+    window.location.href = "login.html";
+}
+
+// 📦 LOAD STUDENTS
+let students = JSON.parse(localStorage.getItem("students")) || [
+    {sId:'25MCA001', pass:'25MCA001', City:'Nadiad', Age:20, Sem:'II', role:'user'},
+    {sId:'25MCA002', pass:'25MCA002', City:'Surat', Age:22, Sem:'II', role:'user'}
+];
+
+let editIndex = -1;
+
+// DISPLAY STUDENTS
+function displayStudents(){
+    let rows = "";
+    students.forEach((s,i)=>{
+        rows += `
+        <tr>
+            <td>${s.sId}</td>
+            <td>${s.pass}</td>
+            <td>${s.City}</td>
+            <td>${s.Age}</td>
+            <td>${s.Sem}</td>
+            <td>
+                <button class="edit" onclick="editStudent(${i})">Edit</button>
+                <button class="delete" onclick="deleteStudent(${i})">Delete</button>
+            </td>
+        </tr>`;
+    });
+    document.getElementById("tableData").innerHTML = rows;
+    localStorage.setItem("students", JSON.stringify(students));
+}
+displayStudents();
+
+
+function saveStudent(){
+    let sId  = document.getElementById("sId").value.trim();
+    let pass = document.getElementById("pass").value.trim();
+    let City = document.getElementById("city").value.trim();
+    let Age  = document.getElementById("age").value;
+    let Sem  = document.getElementById("sem").value.trim();
+
+    if(!sId || !pass){
+        alert("Student ID & Password required");
+        return;
+    }
+
+    let studentObj = {sId, pass, City, Age, Sem, role:'user'};
+
+    if(editIndex === -1){
+        students.push(studentObj);
+    }else{
+        students[editIndex] = studentObj;
+        editIndex = -1;
+    }
+
+    clearForm();
+    displayStudents();
+}
+
+
+function editStudent(i){
+    let s = students[i];
+    document.getElementById("sId").value  = s.sId;
+    document.getElementById("pass").value = s.pass;
+    document.getElementById("city").value = s.City;
+    document.getElementById("age").value  = s.Age;
+    document.getElementById("sem").value  = s.Sem;
+    editIndex = i;
+}
+
+function deleteStudent(i){
+    if(confirm("Delete this student?")){
+        students.splice(i,1);
+        displayStudents();
+    }
+}
+
+// CLEAR FORM
+function clearForm(){
+    sId.value = pass.value = city.value = age.value = sem.value = "";
+}
+
+// LOGOUT
+function logout(){
+    localStorage.removeItem("loggedstudent");
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>

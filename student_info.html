@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Login</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            font-family: Arial, sans-serif;
+        }
+
+        .login {
+            background: #fff;
+            padding: 30px;
+            width: 320px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="button"] {
+            background: #4facfe;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+        }
+
+        #msg {
+            text-align: center;
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login">
+    <h2>Student Login</h2>
+
+    <label>Student ID</label>
+    <input type="text" id="sId">
+
+    <label>Password</label>
+    <input type="password" id="pass">
+
+    <input type="button" value="Login" onclick="validate()">
+
+    <div id="msg"></div>
+</div>
+
+<script>
+function validate() {
+
+    let users = [
+        {sId:'25MCA001', pass:'25MCA001', City:'Nadiad', Age:20, Sem:'II', role:'user'},
+        {sId:'25MCA002', pass:'25MCA002', City:'Surat', Age:22, Sem:'II', role:'user'},
+        {sId:'25MCA003', pass:'25MCA003', City:'Baroda', Age:21, Sem:'II', role:'user'},
+        {sId:'25MCA004', pass:'25MCA004', City:'Ahmedabad', Age:31, Sem:'II', role:'user'},
+        {sId:'25MCA005', pass:'25MCA005', City:'Navsari', Age:41, Sem:'II', role:'user'}
+    ];
+
+    let sId = document.getElementById("sId").value;
+    let pass = document.getElementById("pass").value;
+    let msg  = document.getElementById("msg");
+
+    let student = users.find(u => u.sId === sId && u.pass === pass);
+
+    if (student) {
+        localStorage.setItem("loggedstudent", JSON.stringify(student));
+        window.location.href = "user_view.html";
+    } else {
+        msg.innerHTML = "Invalid Student ID or Password!";
+    }
+}
+</script>
+
+</body>
+</html>
